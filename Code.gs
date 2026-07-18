@@ -29,7 +29,7 @@ var NETLIFY_BUILD_HOOK_URL = '';
 //   async function h(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 //   h('새 비밀번호').then(console.log)
 // 출력된 값을 아래 ADMIN_PW_HASH 자리에 그대로 붙여넣으면 됩니다.
-var ADMIN_PW_HASH = '0e762d99a83cd3a592b573b4f21b4cfb651ec19d7259fdb430936d9a38ac701f';
+var ADMIN_PW_HASH = '339347af4ef526a1ba12972ccc0abd78a5eefb179be6c6ceeb066a6e4c7b664c';
 
 function doPost(e) {
   try {
