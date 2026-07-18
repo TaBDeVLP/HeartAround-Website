@@ -31,7 +31,7 @@ const CONFIG = {
   SHEET_NAME: '웹페이지',
   API_KEY: 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM',
   // 실제 서비스 중인 도메인 주소 (마지막에 슬래시(/) 없이). 배포 전이라면 임시로 두고 나중에 교체해도 됩니다.
-  SITE_URL: 'https://example.com',
+  SITE_URL: 'https://heartaround.co.kr',
   SITE_NAME: '심리상담센터 마음을 걷는 동반자',
 };
 // -----------------------------------------------------------
