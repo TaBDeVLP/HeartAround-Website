@@ -1,0 +1,8 @@
+[build]
+  command = "node build-posts.js"
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"

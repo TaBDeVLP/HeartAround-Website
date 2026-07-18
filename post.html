@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">게시글 불러오는 중... | 심리상담센터 마음을 걷는 동반자</title>
+<meta id="metaDescription" name="description" content="심리상담센터 마음을 걷는 동반자의 게시판 글입니다.">
+<meta id="ogTitle" property="og:title" content="심리상담센터 마음을 걷는 동반자">
+<meta id="ogDescription" property="og:description" content="심리상담센터 마음을 걷는 동반자의 게시판 글입니다.">
+<meta property="og:type" content="article">
+<style>
+  @font-face {
+    font-family: 'SeoulHangang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+  }
+  :root{
+    --cream:#F6F1E8;
+    --linen:#ECE2D3;
+    --ink:#2B241D;
+    --ink-soft:#5B5044;
+    --terracotta:#AE5A3C;
+    --terracotta-deep:#853F2A;
+    --hairline: rgba(43,36,29,0.14);
+    --serif: 'SeoulHangang', serif;
+    --sans: 'SeoulHangang', -apple-system, sans-serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ text-decoration:none; color:inherit; }
+
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    padding:24px 6vw;
+    background:var(--cream);
+    border-bottom:1px solid var(--hairline);
+  }
+  .nav-logo{ font-family:var(--serif); font-size:18px; letter-spacing:0.06em; }
+  .nav-back{
+    font-size:13px;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--hairline);
+    padding-bottom:2px;
+  }
+  .nav-back:hover{ color:var(--terracotta); border-color:var(--terracotta); }
+
+  main{
+    max-width:760px;
+    margin:0 auto;
+    padding:64px 6vw 120px;
+  }
+  .post-eyebrow{
+    font-size:12px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--terracotta);
+    font-weight:600;
+    display:block;
+    margin-bottom:18px;
+  }
+  h1#postTitle{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(26px,3.6vw,38px);
+    line-height:1.4;
+    margin-bottom:16px;
+  }
+  .post-date{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-bottom:28px;
+    margin-bottom:28px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .post-content{
+    font-size:16px;
+    line-height:2.05;
+    color:var(--ink-soft);
+    white-space:pre-wrap;
+    word-break:keep-all;
+    min-height:120px;
+  }
+  .post-footer-nav{
+    margin-top:56px;
+    padding-top:28px;
+    border-top:1px solid var(--hairline);
+  }
+  .post-footer-nav a{
+    font-size:13px;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--hairline);
+    padding-bottom:2px;
+  }
+  .post-footer-nav a:hover{ color:var(--terracotta); border-color:var(--terracotta); }
+  .post-state{
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+
+  footer{
+    padding:48px 6vw 40px;
+    border-top:1px solid var(--hairline);
+    background:var(--linen);
+  }
+  .footer-logo{ font-family:var(--serif); font-size:16px; margin-bottom:14px; }
+  .footer-info div{ font-size:13px; color:var(--ink-soft); line-height:1.9; }
+  .footer-bottom{
+    margin-top:24px;
+    font-size:12px;
+    color:var(--ink-soft);
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav-logo" href="index.html">마음을 걷는 동반자</a>
+    <a class="nav-back" href="index.html#board">← 게시판 목록으로</a>
+  </nav>
+
+  <main>
+    <span class="post-eyebrow">NOTICE &amp; STORY</span>
+    <h1 id="postTitle">불러오는 중입니다...</h1>
+    <div class="post-date" id="postDate"></div>
+    <div class="post-content" id="postContent"><span class="post-state">잠시만 기다려 주세요.</span></div>
+
+    <div class="post-footer-nav">
+      <a href="index.html#board">← 게시판 목록으로</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-logo">심리상담센터 마음을 걷는 동반자</div>
+    <div class="footer-info">
+      <div><b>주소</b> · 경기도 화성시 동탄구 동탄대로5길 9 그랑파사쥬 그린존 4019호</div>
+      <div><b>전화</b> · <a href="tel:0313771508">031-377-1508</a></div>
+      <div><b>이메일</b> · <a href="mailto:psyflex@naver.com">psyflex@naver.com</a></div>
+      <div><b>운영시간</b> · 월·수·목 11:00–19:00 · 토 10:00–19:00</div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 심리상담센터 마음을 걷는 동반자</span>
+      <span>모든 상담은 철저히 비밀이 보장됩니다</span>
+    </div>
+  </footer>
+
+<script>
+  /* =========================================================
+     개별 게시글 페이지 — Google Sheets에서 id로 글 하나를 찾아 표시
+     - 주소 예: post.html?id=3  (index.html과는 완전히 다른 주소)
+     - Googlebot / AI 크롤러가 글마다 별도 URL로 접근/색인할 수 있도록 함
+     ========================================================= */
+
+  // ----- 반드시 index.html과 동일한 값으로 맞춰주세요 -----
+  const SHEET_ID = '1FAEszpOoT-jWIf26heNU_0aRGTq9m1kmUQEUMwgBmVA';
+  const SHEET_NAME = '웹페이지';
+  const API_KEY = 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM';
+  // -------------------------------------------------
+
+  const SITE_NAME = '심리상담센터 마음을 걷는 동반자';
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function getPostIdFromUrl(){
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get('id'));
+    return Number.isFinite(id) && id > 0 ? id : null;
+  }
+
+  async function fetchAllPosts(){
+    const range = encodeURIComponent(`'${SHEET_NAME}'!A2:D`);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+    const res = await fetch(url);
+    if(!res.ok){
+      throw new Error(`글을 불러오지 못했습니다 (HTTP ${res.status}).`);
+    }
+    const data = await res.json();
+    const rows = data.values || [];
+    return rows
+      .filter(r => r[0] !== undefined && r[0] !== '')
+      .map(r => ({ id: Number(r[0]), title: r[1] || '', date: r[2] || '', content: r[3] || '' }));
+  }
+
+  function applySeoTags(post){
+    const title = `${post.title} | ${SITE_NAME}`;
+    const desc = (post.content || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+
+    document.title = title;
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('metaDescription').setAttribute('content', desc);
+    document.getElementById('ogTitle').setAttribute('content', title);
+    document.getElementById('ogDescription').setAttribute('content', desc);
+
+    // 검색엔진용 구조화 데이터(JSON-LD)
+    const ld = document.createElement('script');
+    ld.type = 'application/ld+json';
+    ld.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.title,
+      datePublished: post.date,
+      author: { '@type': 'Organization', name: SITE_NAME },
+      publisher: { '@type': 'Organization', name: SITE_NAME }
+    });
+    document.head.appendChild(ld);
+  }
+
+  async function renderPost(){
+    const id = getPostIdFromUrl();
+    const titleEl = document.getElementById('postTitle');
+    const dateEl = document.getElementById('postDate');
+    const contentEl = document.getElementById('postContent');
+
+    if(id === null){
+      titleEl.textContent = '잘못된 주소입니다';
+      contentEl.innerHTML = '<span class="post-state">글 번호(id)가 없는 주소입니다. 게시판 목록에서 다시 접근해 주세요.</span>';
+      return;
+    }
+
+    try{
+      const posts = await fetchAllPosts();
+      const post = posts.find(p => p.id === id);
+      if(!post){
+        titleEl.textContent = '글을 찾을 수 없습니다';
+        contentEl.innerHTML = '<span class="post-state">삭제되었거나 존재하지 않는 글입니다.</span>';
+        return;
+      }
+      titleEl.textContent = post.title;
+      dateEl.textContent = post.date;
+      contentEl.textContent = post.content;
+      applySeoTags(post);
+    }catch(err){
+      titleEl.textContent = '오류가 발생했습니다';
+      contentEl.innerHTML = `<span class="post-state">${escapeHtml(err.message)}</span>`;
+      console.error(err);
+    }
+  }
+
+  renderPost();
+</script>
+
+</body>
+</html>

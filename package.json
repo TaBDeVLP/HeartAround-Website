@@ -1,0 +1,12 @@
+{
+  "name": "walking-together-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "심리상담센터 마음을 걷는 동반자 - 정적 웹사이트 (구글 시트 연동 게시판)",
+  "scripts": {
+    "build": "node build-posts.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
