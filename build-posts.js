@@ -29,9 +29,13 @@ const path = require('path');
 const CONFIG = {
   SHEET_ID: '1FAEszpOoT-jWIf26heNU_0aRGTq9m1kmUQEUMwgBmVA',
   SHEET_NAME: '웹페이지',
-  API_KEY: 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM',
+  // 서버(빌드) 전용 API 키: Netlify 환경변수 SHEETS_API_KEY 값을 우선 사용합니다.
+  // (브라우저용 키와 분리하는 이유: 브라우저용 키에 "웹사이트 제한"을 걸어두면
+  //  Netlify 서버에서 보내는 요청은 리퍼러가 없어 거부(HTTP 403)되기 때문입니다.
+  //  아래 하드코딩 값은 환경변수를 아직 설정하지 않았을 때를 위한 임시 대체값입니다.)
+  API_KEY: process.env.SHEETS_API_KEY || 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM',
   // 실제 서비스 중인 도메인 주소 (마지막에 슬래시(/) 없이). 배포 전이라면 임시로 두고 나중에 교체해도 됩니다.
-  SITE_URL: 'https://example.com',
+  SITE_URL: 'https://heartaround.co.kr',
   SITE_NAME: '심리상담센터 마음을 걷는 동반자',
 };
 // -----------------------------------------------------------
