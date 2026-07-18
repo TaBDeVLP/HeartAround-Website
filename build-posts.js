@@ -31,7 +31,7 @@ const CONFIG = {
   SHEET_NAME: '웹페이지',
   API_KEY: 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM',
   // 실제 서비스 중인 도메인 주소 (마지막에 슬래시(/) 없이). 배포 전이라면 임시로 두고 나중에 교체해도 됩니다.
-  SITE_URL: 'https://heartaround.co.kr',
+  SITE_URL: 'https://example.com',
   SITE_NAME: '심리상담센터 마음을 걷는 동반자',
 };
 // -----------------------------------------------------------
@@ -195,6 +195,16 @@ async function main() {
   console.log(`총 ${posts.length}개 글을 찾았습니다.`);
 
   fs.mkdirSync(POSTS_DIR, { recursive: true });
+
+  // 시트에서 이미 삭제된 글의 정적 파일이 남아있으면 정리
+  const validFileNames = new Set(posts.map((p) => `post-${p.id}.html`));
+  fs.readdirSync(POSTS_DIR).forEach((fileName) => {
+    if (fileName.endsWith('.html') && !validFileNames.has(fileName)) {
+      fs.unlinkSync(path.join(POSTS_DIR, fileName));
+      console.log('삭제(정리):', path.join('posts', fileName));
+    }
+  });
+
   posts.forEach((post) => {
     const filePath = path.join(POSTS_DIR, `post-${post.id}.html`);
     fs.writeFileSync(filePath, buildPostPage(post), 'utf8');

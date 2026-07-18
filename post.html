@@ -104,6 +104,19 @@
     padding-bottom:2px;
   }
   .post-footer-nav a:hover{ color:var(--terracotta); border-color:var(--terracotta); }
+  .post-footer-nav{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .post-delete-btn{
+    background:none;
+    font-family:inherit;
+    font-size:13px;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    border:1px solid var(--hairline);
+    border-radius:999px;
+    padding:6px 16px;
+    cursor:pointer;
+  }
+  .post-delete-btn:hover{ color:#fff; background:var(--terracotta-deep); border-color:var(--terracotta-deep); }
   .post-state{
     color:var(--ink-soft);
     font-size:14px;
@@ -141,6 +154,7 @@
 
     <div class="post-footer-nav">
       <a href="index.html#board">← 게시판 목록으로</a>
+      <button type="button" id="deletePostBtn" class="post-delete-btn" style="display:none;">이 글 삭제</button>
     </div>
   </main>
 
@@ -169,9 +183,15 @@
   const SHEET_ID = '1FAEszpOoT-jWIf26heNU_0aRGTq9m1kmUQEUMwgBmVA';
   const SHEET_NAME = '웹페이지';
   const API_KEY = 'AIzaSyAq5T9uK0nbz21xqe-JBATN7KophJzjlHM';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvC1ej2h6kjMceOskajxAzjQIOfs4lvilnrTYl8694FiAvqsqWX4J8wC3RpefVZZf1rA/exec';
   // -------------------------------------------------
 
   const SITE_NAME = '심리상담센터 마음을 걷는 동반자';
+
+  async function sha256Hex(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
 
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -226,6 +246,7 @@
     const titleEl = document.getElementById('postTitle');
     const dateEl = document.getElementById('postDate');
     const contentEl = document.getElementById('postContent');
+    const deleteBtn = document.getElementById('deletePostBtn');
 
     if(id === null){
       titleEl.textContent = '잘못된 주소입니다';
@@ -245,10 +266,43 @@
       dateEl.textContent = post.date;
       contentEl.textContent = post.content;
       applySeoTags(post);
+
+      deleteBtn.style.display = 'inline-block';
+      deleteBtn.addEventListener('click', () => handleDeleteClick(id));
     }catch(err){
       titleEl.textContent = '오류가 발생했습니다';
       contentEl.innerHTML = `<span class="post-state">${escapeHtml(err.message)}</span>`;
       console.error(err);
+    }
+  }
+
+  async function handleDeleteClick(id){
+    if(!confirm('이 글을 정말 삭제할까요? 되돌릴 수 없습니다.')) return;
+    const password = prompt('비밀번호를 입력해 주세요.');
+    if(password === null) return; // 취소
+    if(!password){ alert('비밀번호를 입력해 주세요.'); return; }
+
+    const deleteBtn = document.getElementById('deletePostBtn');
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = '삭제 중...';
+    try{
+      const passwordHash = await sha256Hex(password);
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'delete', id, passwordHash })
+      });
+      const result = await res.json();
+      if(result.result !== 'success'){
+        throw new Error(result.message || '삭제에 실패했습니다.');
+      }
+      alert('삭제되었습니다.');
+      window.location.href = 'index.html#board';
+    }catch(err){
+      alert('삭제 중 오류가 발생했습니다: ' + err.message);
+      console.error(err);
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = '이 글 삭제';
     }
   }
 
