@@ -40,40 +40,80 @@ function doPost(e) {
 
     var data = JSON.parse(e.postData.contents);
 
-    // ----- 비밀번호(해시) 확인: 이 값이 일치하지 않으면 절대 시트에 쓰지 않음 -----
+    // ----- 비밀번호(해시) 확인: 이 값이 일치하지 않으면 절대 시트를 건드리지 않음 -----
     var providedHash = (data.passwordHash || '').toString().trim().toLowerCase();
     if (providedHash !== ADMIN_PW_HASH) {
       return jsonOutput({ result: 'error', message: '비밀번호가 올바르지 않습니다.' });
     }
     // --------------------------------------------------------------------
 
-    var title = (data.title || '').toString().trim();
-    var content = (data.content || '').toString().trim();
+    var action = (data.action || 'create').toString();
 
-    if (!title || !content) {
-      return jsonOutput({ result: 'error', message: '제목과 내용을 모두 입력해 주세요.' });
+    if (action === 'delete') {
+      return handleDelete(sheet, data);
     }
-    if (title.length > 60) title = title.slice(0, 60);
-
-    // 기존 id 중 최댓값 + 1을 새 id로 사용 (중간에 글이 삭제되어도 안전)
-    var lastRow = sheet.getLastRow();
-    var newId = 1;
-    if (lastRow >= 2) {
-      var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues()
-        .map(function (row) { return Number(row[0]); })
-        .filter(function (n) { return !isNaN(n); });
-      if (ids.length > 0) newId = Math.max.apply(null, ids) + 1;
-    }
-
-    var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
-    sheet.appendRow([newId, title, today, content]);
-
-    triggerStaticRebuild();
-
-    return jsonOutput({ result: 'success', id: newId, date: today });
+    return handleCreate(sheet, data);
   } catch (err) {
     return jsonOutput({ result: 'error', message: err.message });
   }
+}
+
+function handleCreate(sheet, data) {
+  var title = (data.title || '').toString().trim();
+  var content = (data.content || '').toString().trim();
+
+  if (!title || !content) {
+    return jsonOutput({ result: 'error', message: '제목과 내용을 모두 입력해 주세요.' });
+  }
+  if (title.length > 60) title = title.slice(0, 60);
+
+  // 기존 id 중 최댓값 + 1을 새 id로 사용 (중간에 글이 삭제되어도 안전)
+  var lastRow = sheet.getLastRow();
+  var newId = 1;
+  if (lastRow >= 2) {
+    var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues()
+      .map(function (row) { return Number(row[0]); })
+      .filter(function (n) { return !isNaN(n); });
+    if (ids.length > 0) newId = Math.max.apply(null, ids) + 1;
+  }
+
+  var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
+  sheet.appendRow([newId, title, today, content]);
+
+  triggerStaticRebuild();
+
+  return jsonOutput({ result: 'success', id: newId, date: today });
+}
+
+function handleDelete(sheet, data) {
+  var id = Number(data.id);
+  if (!id || isNaN(id)) {
+    return jsonOutput({ result: 'error', message: '삭제할 글 번호(id)가 올바르지 않습니다.' });
+  }
+
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) {
+    return jsonOutput({ result: 'error', message: '삭제할 글이 없습니다.' });
+  }
+
+  var ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  var targetRow = -1;
+  for (var i = 0; i < ids.length; i++) {
+    if (Number(ids[i][0]) === id) {
+      targetRow = i + 2; // 시트 실제 행 번호 (1행은 헤더)
+      break;
+    }
+  }
+
+  if (targetRow === -1) {
+    return jsonOutput({ result: 'error', message: '해당 번호의 글을 찾을 수 없습니다. (이미 삭제되었을 수 있습니다)' });
+  }
+
+  sheet.deleteRow(targetRow);
+
+  triggerStaticRebuild();
+
+  return jsonOutput({ result: 'success', id: id });
 }
 
 // 새 글이 저장된 직후, Netlify에 "지금 시트 내용으로 정적 페이지를 다시 만들어줘"
