@@ -63,10 +63,34 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// 본문 앞부분을 meta description으로 쓸 때, 문장 중간에서 뚝 끊기지 않도록
+// 100~120자 사이에서 마침표/느낌표/물음표 등 문장이 끝나는 지점을 찾아 자릅니다.
+// 적당한 문장 끝을 못 찾으면 공백 기준으로 잘라 "…"을 붙입니다.
+function truncateDesc(rawText, min = 80, max = 120) {
+  const clean = String(rawText || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+
+  const window = clean.slice(0, max);
+  const sentenceEnds = [...window.matchAll(/[.!?](?:\s|$)/g)];
+  if (sentenceEnds.length) {
+    const lastEnd = sentenceEnds[sentenceEnds.length - 1];
+    const cutAt = lastEnd.index + 1;
+    if (cutAt >= min) return window.slice(0, cutAt).trim();
+  }
+
+  const lastSpace = window.lastIndexOf(' ');
+  const cutAt = lastSpace >= min ? lastSpace : max;
+  return `${window.slice(0, cutAt).trim()}…`;
+}
+
 function buildPostPage(post) {
   const title = escapeHtml(post.title);
-  const desc = escapeHtml((post.content || '').replace(/\s+/g, ' ').trim().slice(0, 120));
-  const canonicalUrl = `${CONFIG.SITE_URL}/post.html?id=${post.id}`;
+  const desc = escapeHtml(truncateDesc(post.content));
+  // 정적 페이지 자기 자신의 주소. 검색엔진에는 이 주소를 "진짜" 주소로 알려줘야
+  // 자바스크립트로 나중에 채워지는 post.html?id=N 쪽과 평가가 갈리지 않습니다.
+  const canonicalUrl = `${CONFIG.SITE_URL}/posts/post-${post.id}.html`;
+  // 댓글 등 실시간 기능을 보여주는 방문자용 페이지 주소(검색엔진용 대표 주소 아님).
+  const liveUrl = `${CONFIG.SITE_URL}/post.html?id=${post.id}`;
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -130,7 +154,7 @@ ${JSON.stringify(
 
     <div class="post-live-note">
       이 페이지는 검색엔진 수집을 위해 생성된 정적 페이지입니다.
-      최신 댓글이나 실시간 업데이트는 <a href="${canonicalUrl}">실시간 버전 보기</a>에서 확인하실 수 있습니다.
+      최신 댓글이나 실시간 업데이트는 <a href="${liveUrl}">실시간 버전 보기</a>에서 확인하실 수 있습니다.
     </div>
 
     <div class="post-footer-nav">
